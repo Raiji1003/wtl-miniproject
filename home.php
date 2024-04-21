@@ -118,18 +118,23 @@
 
 <?php
 
-  if($_SERVER["REQUEST_METHOD"]=="POST")
-    $server=localhost;
-    $email= $_post["email"];
-    $password=$_post["password"];
-    $psw_repeat= $_post["psw_repeat"];
+if(isset($_POST["email"])){
+    $conn = mysqli_connect("localhost","root","","travel");
+	  if (!$conn){
+        die("Failed to connect to MySQL: " . mysqli_connect_error());
+	  }
+    $email= $_POST["email"];
+    $password=$_POST["psw"];
+    $psw_repeat= $_POST["psw_repeat"];
     $exists=false;
-  if(($password==$psw_repeat)&& $exists==false){
-    $sql="INSERT INTO `travel`(`email`,`password`)VALUES('$email','$password');
-    $result=mysqli_query($conn,$sql);
+    if(($password==$psw_repeat) && ($exists==false)){
+      $sql="INSERT INTO `sign up`(`email`,`password`)VALUES('$email','$password');";
+      $result=mysqli_query($conn,$sql);
+    } 
+    mysqli_close($conn);
   }
 ?>
--- <-- The Modal (contains the Sign Up form) -->
+
 <div id="id01" class="modal">
   <span onclick="document.getElementById('id01').style.display='none'" class="close">x</span>
   <form class="modal-content" action="" method="post">
@@ -156,19 +161,43 @@
     </div>
   </form>
 </div>
+<?php
 
-<!-- The Modal (contains the Sign In form) -->
+if(isset($_POST["email1"])){
+$email= $_POST["email1"];
+$password= $_POST["psw1"];
+
+$conn = mysqli_connect("localhost","root","","travel");
+
+if($conn->connect_error){
+  die("connection_failed:$conn->connect_error");
+  
+}
+$query = "SELECT * FROM `sign up` WHERE `email`='$email' AND `password`='$password'";
+$result=$conn->query($query);
+ if($result->num_rows == 1){
+  $_SESSION['signin'] = $email;
+ }
+ else{
+  exit();
+ }
+ $conn->close();
+
+}
+
+?>
+
 <div id="id02" class="modal">
   <span onclick="document.getElementById('id02').style.display='none'" class="close">x</span>
   <form class="modal-content" action="" method="post">
     <div class="contain">
       <h1 style="text-align: center; font-size: 1.5rem;">Sign In</h1>
       <hr>
-      <label for="email"><b>Email</b></label>
-      <input type="text" placeholder="Enter Email" name="email" required>
+      <label for="email1"><b>Email</b></label>
+      <input type="text" placeholder="Enter Email" name="email1" required>
 
-      <label for="psw"><b>Password</b></label>
-      <input type="password" placeholder="Enter Password" name="psw" required>
+      <label for="psw1"><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" name="psw1" required>
 
       <label>
         <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
