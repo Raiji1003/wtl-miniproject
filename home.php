@@ -115,10 +115,24 @@
 </div>
 <br>
 <br>
-<!-- The Modal (contains the Sign Up form) -->
+
+<?php
+
+  if($_SERVER["REQUEST_METHOD"]=="POST")
+    $server=localhost;
+    $email= $_post["email"];
+    $password=$_post["password"];
+    $psw_repeat= $_post["psw_repeat"];
+    $exists=false;
+  if(($password==$psw_repeat)&& $exists==false){
+    $sql="INSERT INTO `travel`(`email`,`password`)VALUES('$email','$password');
+    $result=mysqli_query($conn,$sql);
+  }
+?>
+-- <-- The Modal (contains the Sign Up form) -->
 <div id="id01" class="modal">
   <span onclick="document.getElementById('id01').style.display='none'" class="close">x</span>
-  <form class="modal-content">
+  <form class="modal-content" action="" method="post">
     <div class="contain">
       <h1 style="text-align: center; font-size: 1.5rem;">Sign Up</h1>
       <p style="text-align: center;">Please fill in this form to create an account.</p>
@@ -129,8 +143,8 @@
       <label for="psw"><b>Password</b></label>
       <input type="password" placeholder="Enter Password" name="psw" required>
 
-      <label for="psw-repeat"><b>Repeat Password</b></label>
-      <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
+      <label for="psw_repeat"><b>Repeat Password</b></label>
+      <input type="password" placeholder="Repeat Password" name="psw_repeat" required>
       
       <p><a href="#" style="color:dodgerblue; text-decoration: none;">Terms & Conditions</a>.</p>
       <br>
@@ -146,7 +160,7 @@
 <!-- The Modal (contains the Sign In form) -->
 <div id="id02" class="modal">
   <span onclick="document.getElementById('id02').style.display='none'" class="close">x</span>
-  <form class="modal-content">
+  <form class="modal-content" action="" method="post">
     <div class="contain">
       <h1 style="text-align: center; font-size: 1.5rem;">Sign In</h1>
       <hr>
